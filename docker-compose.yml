@@ -6,24 +6,24 @@ services:
     container_name: mysql
     restart: unless-stopped
 
-    environment:
-      MYSQL_ROOT_PASSWORD: rootpassword
-      MYSQL_DATABASE: app_db
-      MYSQL_USER: app_user
-      MYSQL_PASSWORD: app_password
-      TZ: Asia/Jakarta
-
-    ports:
-      - "3306:3306"
+    env_file:
+      - .env
 
     volumes:
       - mysql_data:/var/lib/mysql
 
     healthcheck:
-      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-prootpassword"]
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -p$$MYSQL_ROOT_PASSWORD"]
       interval: 10s
       timeout: 5s
       retries: 10
 
+    networks:
+      - internal
+
 volumes:
   mysql_data:
+
+networks:
+  internal:
+    driver: bridge
