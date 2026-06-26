@@ -9,6 +9,9 @@ services:
     env_file:
       - .env
 
+    ports:
+      - "3309:3306"
+
     volumes:
       - mysql_data:/var/lib/mysql
 
@@ -18,12 +21,5 @@ services:
       timeout: 5s
       retries: 10
 
-    networks:
-      - internal
-
 volumes:
   mysql_data:
-
-networks:
-  internal:
-    driver: bridge
